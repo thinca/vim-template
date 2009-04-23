@@ -1,0 +1,198 @@
+*template.txt*	シンプルで柔軟なテンプレートエンジン。
+
+Version: 0.1
+Author : thinca <http://d.hatena.ne.jp/thinca/>
+License: クリエイティブ・コモンズの表示 2.1 日本ライセンス
+         <http://creativecommons.org/licenses/by/2.1/jp/>
+
+==============================================================================
+目次						*template-contents*
+
+導入				|template-introduction|
+使い方				|template-usage|
+  テンプレートの選ばれ方	  |template-selection|
+  コマンド実行			  |template-command-execution|
+インターフェース		|template-interface|
+  コマンド			  |template-commands|
+  イベント			  |template-events|
+  オプション			  |template-options|
+更新履歴			|template-changelog|
+
+
+==============================================================================
+導入						*template-introduction*
+
+*template* は、新しいファイルや空のファイルの編集を始める際、自動的にテンプレ
+ートファイルを読み込むためのプラグインです。コマンドにより任意のタイミングで読
+み込むこともできます。開くファイル名に合わせてテンプレートファイルが選択される
+他、開いた後に任意のコマンドを実行できます。
+
+
+==============================================================================
+使い方						*template-usage*
+
+------------------------------------------------------------------------------
+テンプレートの選ばれ方				*template-selection*
+
+1. まず、全てのテンプレートファイルのリストが |g:template_basedir| と
+|g:template_files| によって決定します。これらのオプションは |globpath()| 関数
+の引数に対応しています。
+
+2. 全てのテンプレートファイル名のフルパスに対して、 |g:template_free_pattern|
+にマッチする部分をワイルドカードに置き換えます。さらに、最初のワイルドカードよ
+り前の階層もワイルドカードになります。
+例: >
+  g:template_free_pattern = 'template'
+  変換前: /path/to/template/plugin/template.vim
+  変換後: */plugin/*.vim
+
+3. 開いたファイルのファイル名にマッチするテンプレートが選ばれます。複数あった
+場合、ワイルドカード以外の部分が最も長くマッチしたファイルが選ばれます。
+例: >
+  開くファイル: /home/user/project/plugin/new.vim
+  /path/to/template/template.vim
+  ->  */*.vim (5 文字マッチ)
+  /path/to/template/plugin/template.vim
+  ->  */plugin/*.vim (12 文字マッチ)        <-- 最長
+  /path/to/template/autoload/template.vim
+  ->  */autoload/*.vim (マッチしない)
+
+例:
+以下のようにファイルが配置されているとすると:
+>
+ ~/.vim/template
+ |-- doc
+ |   `-- template.txt
+ |-- plugin
+ |   `-- template.vim
+ |-- template.java
+ |-- template.rb
+ |-- template.vim
+ |-- template_spec.rb
+ `-- templateTest.java
+<
+以下のようにテンプレートが読み込まれます。
+
+開くファイル        読み込まれるテンプレート ~
+------------        ------------------------
+foo.vim             template.vim
+plugin/foo.vim      plugin/template.vim
+Foo.java            template.java
+FooTest.java        templateTest.java
+foo.rb              template.rb
+foo_spec.rb         template_spec.rb
+foo.txt             (なし)
+doc/foo.txt         doc/template.txt
+
+------------------------------------------------------------------------------
+コマンド実行					*template-command-execution*
+
+template.vim には、特定の文字列を置換するような機能はありません。代わりに、任
+意のコマンドを実行できます。実行する方法は2つあります。
+
+1. イベントを使う
+テンプレートをロードした際に |User| イベントが発生します(|template-events|)。
+全てのテンプレートで共通の処理を行いたい場合に使用します。
+
+例:
+<%= %> の中身をvimで評価して展開する: >
+	autocmd User plugin-template-loaded
+	\ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+<	テンプレートに以下のように書いておくと日付に展開されます。 >
+	<%= strftime('%Y-%m-%d') %>
+<
+<+CURSOR+> にカーソルを移動する: >
+	autocmd User plugin-template-loaded
+	\    if search('<+CURSOR+>')
+	\  |   execute 'normal! "_da>'
+	\  | endif
+<
+外部コマンドでフィルタリングする: >
+	autocmd User plugin-template-loaded silent! :%!erb
+	autocmd User plugin-template-loaded silent! :%!php
+<
+もちろん、関数を呼んでも構いません。
+
+2. テンプレートファイルに書く
+テンプレートファイルの先頭に : に続けて Vim コマンドを書いておくと、ロード時に
+実行されます。複数行書くことも可能です。コマンド部分はコマンド実行前に削除され
+ます。
+|:finish| を使うとそれ以降は実行されません。 : 自体をテンプレートに含めたい場
+合はこれを利用してください。
+NOTE: コマンドの実行中、 @" レジスタにはコマンド自体が格納されています。コマン
+ド終了時に元の値に復元されるので、この値は変更できません。
+NOTE: 'save_reg' に値を代入しておくと、 @" にこの値が復元されます。
+
+例:
+イベントの例をテンプレートファイルに書くことで、そのテンプレートファイルのみに
+適用するようにできます。 >
+	:if search('<+CURSOR+>')
+	:  normal! "_da>
+	:endif
+	#!include <stdio.h>
+	
+	int main(int argc, char** argv){
+		<+CURSOR+>
+	}
+
+別の例 (plugin/template.vim): >
+	:% s/PLUGIN/\=expand('%:t:r')/ge
+	if exists('g:loaded_PLUGIN')
+	  finish
+	endif
+	let g:loaded_PLUGIN = 1
+
+
+==============================================================================
+インターフェース				*template-interface*
+
+------------------------------------------------------------------------------
+コマンド					*template-commands*
+
+:TemplateLoad[!] {pattern}			*:TemplateLoad*
+			指定したパターンに一致するテンプレートを読み込みま
+			す。バッファが空でない場合、何もしません。 [!] を付け
+			ると強制的に読み込みます。
+
+------------------------------------------------------------------------------
+イベント					*template-events*
+
+User plugin-template-preexec		*User:plugin-template-preexec*
+	テンプレートファイルに実行コマンドが書かれていた場合、のコマンドが実行
+	される前に発生するイベントです。この時、無名レジスタ |quote_quote|
+	(@") には実行されるコマンドが格納されています。これを上書きすることで
+	変更が可能です。
+
+User plugin-template-loaded		*User:plugin-template-loaded*
+	テンプレートファイルを読み込んだ後に発生するイベントです。
+
+------------------------------------------------------------------------------
+オプション					*template-options*
+
+g:template_basedir				*g:template_basedir*
+	テンプレートファイルを探す基準となるディレクトリをカンマ区切りで指定し
+	ます。この値は |globpath()| の第1引数に直接渡されます。
+	デフォルト: >
+	&runtimepath
+
+g:template_files				*g:template_files*
+	テンプレートファイルのパターンを指定します。この値は |globpath()| の第
+	2引数に直接渡されます。
+	デフォルト: >
+	template/**/*template*
+
+g:template_free_pattern				*g:template_free_pattern*
+	テンプレートファイルのファイル名のうちワイルドカードとして扱う部分を正
+	規表現で指定します。
+	デフォルト: >
+	template
+
+==============================================================================
+更新履歴					*template-changelog*
+
+0.1	2009-04-24
+	- 初版。
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
