@@ -123,7 +123,7 @@ endfunction
 
 
 call s:set_default('g:template_basedir', &runtimepath)
-call s:set_default('g:template_files', 'template/**/*template*')
+call s:set_default('g:template_files', 'template/**')
 call s:set_default('g:template_free_pattern', 'template')
 
 

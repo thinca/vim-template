@@ -179,7 +179,7 @@ g:template_files				*g:template_files*
 	テンプレートファイルのパターンを指定します。この値は |globpath()| の第
 	2引数に直接渡されます。
 	デフォルト: >
-	'template/**/*template*'
+	'template/**'
 
 g:template_free_pattern				*g:template_free_pattern*
 	テンプレートファイルのファイル名のうちワイルドカードとして扱う部分を正
@@ -193,6 +193,7 @@ g:template_free_pattern				*g:template_free_pattern*
 
 x.x.x	xxxx-xx-xx
 	- テンプレート内のコマンドの実行方法を変更。
+	- |g:template_files| のデフォルト値を変更。
 
 0.1.0	2009-04-24
 	- 初版。
