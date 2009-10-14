@@ -12,6 +12,8 @@ let g:loaded_template = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
+
+
 " Core functions. {{{1
 function! s:load_template(file, force) " {{{2
   let empty_buffer = line('$') == 1 && strlen(getline('1')) == 0
@@ -46,6 +48,8 @@ function! s:load_template(file, force) " {{{2
   silent doautocmd User plugin-template-loaded
 endfunction
 
+
+
 function! s:search_template(file) " {{{2
   if !exists('g:template_basedir')
     return ''
@@ -78,11 +82,15 @@ function! s:search_template(file) " {{{2
   return longest[0]
 endfunction
 
+
+
 " Misc functions. {{{1
 " Return the reversed string.
 function! s:reverse(str) " {{{2
   return join(reverse(split(a:str, '\zs')), '')
 endfunction
+
+
 " Unify pass separator to a slash.
 function! s:to_slash_path(path) " {{{2
   if has('win16') || has('win32') || has('win64')
@@ -90,6 +98,8 @@ function! s:to_slash_path(path) " {{{2
   endif
   return a:path
 endfunction
+
+
 
 " Complete function for :TemplateLoad
 function! s:TemplateLoad_complete(lead, cmd, pos) " {{{2
@@ -100,6 +110,8 @@ function! s:TemplateLoad_complete(lead, cmd, pos) " {{{2
   return filter(list, 'v:val =~ "^\\V" . lead')
 endfunction
 
+
+
 " Default settings. {{{1
 function! s:set_default(var, val)
   if !exists(a:var) || type({a:var}) != type(a:val)
@@ -108,19 +120,27 @@ function! s:set_default(var, val)
   endif
 endfunction
 
+
+
 call s:set_default('g:template_basedir', &runtimepath)
 call s:set_default('g:template_files', 'template/**/*template*')
 call s:set_default('g:template_free_pattern', 'template')
+
+
 
 delfunction s:set_default
 " Defining commands and autocmds. {{{1
 command! -nargs=? -bang -bar -complete=customlist,s:TemplateLoad_complete
   \ TemplateLoad call s:load_template(<q-args>, <bang>0)
 
+
+
 augroup plugin-template
   autocmd!
   autocmd BufReadPost,BufNewFile * TemplateLoad
 augroup END
+
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
