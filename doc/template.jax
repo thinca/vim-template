@@ -158,10 +158,10 @@ NOTE: 'save_reg' に値を代入しておくと、 @" にこの値が復元さ�
 イベント					*template-events*
 
 User plugin-template-preexec		*User:plugin-template-preexec*
-	テンプレートファイルに実行コマンドが書かれていた場合、のコマンドが実行
-	される前に発生するイベントです。この時、無名レジスタ |quote_quote|
-	(@") には実行されるコマンドが格納されています。これを上書きすることで
-	変更が可能です。
+	テンプレートファイル内のコマンドが実行される前に発生するイベントです。
+	この時、無名レジスタ |quote_quote| (@") には実行されるコマンドが格納さ
+	れています。これを上書きすることで変更が可能です。
+	テンプレートファイル内にコマンドがない場合は発生しません。
 
 User plugin-template-loaded		*User:plugin-template-loaded*
 	テンプレートファイルを読み込んだ後に発生するイベントです。
@@ -179,16 +179,20 @@ g:template_files				*g:template_files*
 	テンプレートファイルのパターンを指定します。この値は |globpath()| の第
 	2引数に直接渡されます。
 	デフォルト: >
-	template/**/*template*
+	'template/**/*template*'
 
 g:template_free_pattern				*g:template_free_pattern*
 	テンプレートファイルのファイル名のうちワイルドカードとして扱う部分を正
 	規表現で指定します。
 	デフォルト: >
-	template
+	'template'
+
 
 ==============================================================================
 更新履歴					*template-changelog*
+
+x.x.x	xxxx-xx-xx
+	- テンプレート内のコマンドの実行方法を変更。
 
 0.1.0	2009-04-24
 	- 初版。
