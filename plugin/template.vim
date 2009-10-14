@@ -35,7 +35,7 @@ function! s:load_template(file, force) " {{{2
   endif
 
   if getline('.') =~ '^:'
-    let save_reg = @"
+    let [save_reg, save_reg_type] = [getreg('"'), getregtype('"')]
     .;/^[^:]\|^$\|^:\s*fini\%[sh]\>/-1 delete "
     if getline('.') =~# ':\s*fini\%[sh]\>'
       delete _
@@ -43,7 +43,7 @@ function! s:load_template(file, force) " {{{2
     silent doautocmd User plugin-template-preexec
     " NOTE: :execute do not work when included comments.
     silent :@"
-    let @" = save_reg
+    call setreg('"', save_reg, save_reg_type)
   endif
   silent doautocmd User plugin-template-loaded
 endfunction
