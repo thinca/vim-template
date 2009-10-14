@@ -95,6 +95,14 @@ template.vim には、特定の文字列を置換するような機能はあり�
 全てのテンプレートで共通の処理を行いたい場合に使用します。
 
 例:
+置換キーワードを定義する: >
+	autocmd User plugin-template-loaded call s:template_keywords()
+	function! s:template_keywords()
+	  %s/<+FILE NAME+>/\=expand('%:t')/g
+	  %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+	  " And more...
+	endfunction
+
 <%= %> の中身をvimで評価して展開する: >
 	autocmd User plugin-template-loaded
 	\ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
@@ -154,6 +162,13 @@ NOTE: 'save_reg' に値を代入しておくと、 @" にこの値が復元さ�
 			す。バッファが空でない場合、何もしません。 [!] を付け
 			ると強制的に読み込みます。
 
+例: FileType に対応したテンプレートを開く >
+	autocmd FileType * execute 'TemplateLoad /filetype/' . &l:filetype
+そして以下のようにテンプレートファイルを置いておく: >
+	~/.vim/template/filetype/perl
+	~/.vim/template/filetype/html
+			:
+
 ------------------------------------------------------------------------------
 イベント					*template-events*
 
@@ -194,6 +209,7 @@ g:template_free_pattern				*g:template_free_pattern*
 x.x.x	xxxx-xx-xx
 	- テンプレート内のコマンドの実行方法を変更。
 	- |g:template_files| のデフォルト値を変更。
+	- ヘルプにいくつか例を追加。
 
 0.1.0	2009-04-24
 	- 初版。
