@@ -43,19 +43,19 @@ License: クリエイティブ・コモンズの表示 2.1 日本ライセンス
 り前の階層もワイルドカードになります。
 例: >
   g:template_free_pattern = 'template'
-  変換前: /path/to/template/plugin/template.vim
-  変換後: */plugin/*.vim
+  変換前: /path/to/the_template/plugin/template.vim
+  変換後: *the_*/plugin/*.vim
 
 3. 開いたファイルのファイル名にマッチするテンプレートが選ばれます。複数あった
 場合、ワイルドカード以外の部分が最も長くマッチしたファイルが選ばれます。
 例: >
   開くファイル: /home/user/project/plugin/new.vim
-  /path/to/template/template.vim
-  ->  */*.vim (5 文字マッチ)
-  /path/to/template/plugin/template.vim
-  ->  */plugin/*.vim (12 文字マッチ)        <-- 最長
-  /path/to/template/autoload/template.vim
-  ->  */autoload/*.vim (マッチしない)
+  テンプレート1: /path/to/template/template.vim
+                 ->  */*.vim (5 文字マッチ)
+  テンプレート2: /path/to/template/plugin/template.vim
+                 ->  */plugin/*.vim (12 文字マッチ)        <-- 最長
+  テンプレート3: /path/to/template/autoload/template.vim
+                 ->  */autoload/*.vim (マッチしない)
 
 例:
 以下のようにファイルが配置されているとすると:
