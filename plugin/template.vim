@@ -103,7 +103,7 @@ endfunction
 
 " Complete function for :TemplateLoad
 function! s:TemplateLoad_complete(lead, cmd, pos) " {{{2
-  let lead = escape(matchstr(a:cmd, 'T\%[emplateLoad]\s\+\zs.*$'), '\')
+  let lead = escape(matchstr(a:cmd, 'T\%[emplateLoad]!\?\s\+\zs.*$'), '\')
   let pat = '[/\\][^/\\]*' . g:template_free_pattern
   let list = map(filter(split(globpath(g:template_basedir, g:template_files),
     \ "\n"), '!isdirectory(v:val)'), 'v:val[match(v:val, pat):]')
