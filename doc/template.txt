@@ -1,0 +1,222 @@
+*template.txt*	Simple and flexible template engine.
+
+Version: 0.1.0
+Author : thinca <thinca+vim@gmail.com>
+License: Creative Commons Attribution 2.1 Japan License
+         <http://creativecommons.org/licenses/by/2.1/jp/deed.en>
+
+==============================================================================
+CONTENTS					*template-contents*
+
+INTRODUCTION			|template-introduction|
+USAGE				|template-usage|
+  TEMPLATE SELECTION		  |template-selection|
+  COMMAND EXECUTION		  |template-command-execution|
+INTERFACE			|template-interface|
+  COMMANDS			  |template-commands|
+  EVENTS			  |template-events|
+  OPTIONS			  |template-options|
+CHANGELOG			|template-changelog|
+
+
+==============================================================================
+INTRODUCTION					*template-introduction*
+
+*template* is a Vim plugin to read the template file automatically when the
+edit of the file is newly started.  Template file is selected to match the
+file name to open. Also, you can run any command after the open.
+
+
+==============================================================================
+USAGE						*template-usage*
+
+------------------------------------------------------------------------------
+TEMPLATE SELECTION				*template-selection*
+
+1. First, a list of all template file is determined by |g:template_basedir|
+and |g:template_files|.  These options correspond to the arguments of
+|globpath()| function.
+
+2. The part that matches to |g:template_free_pattern| in the template file
+name in the full path is replaced with wildcard.  In addition, the previous
+hierarchy from wildcard that appears first becomes a wildcard.
+Example: >
+  g:template_free_pattern = 'template'
+  Before: /path/to/the_template/plugin/template.vim
+  After : *the_*/plugin/*.vim
+
+3. Is chosen to match the template file to open.  If more than one is chosen
+that matches the longest portion of the file other than the wildcard.
+3. Are chosen to match the template file name opened. If more than one is
+chosen that matches the longest portion of the file other than the wildcard. 
+
+3. The template that matches to the file name of an open file is chosen.  The
+item to which the parts other than the wildcard match longest is chosen if
+there are plurals.
+Example: >
+  Open file: /home/user/project/plugin/new.vim
+  template1: /path/to/template/template.vim
+             ->  */*.vim (5 characters match)
+  template2: /path/to/template/plugin/template.vim
+             ->  */plugin/*.vim (12 characters match)        <-- longest
+  template3: /path/to/template/autoload/template.vim
+             ->  */autoload/*.vim (no match)
+
+Example:
+If the template files are located as follows:
+>
+ ~/.vim/template
+ |-- doc
+ |   `-- template.txt
+ |-- plugin
+ |   `-- template.vim
+ |-- template.java
+ |-- template.rb
+ |-- template.vim
+ |-- template_spec.rb
+ `-- templateTest.java
+<
+Template is loaded as follows.
+
+Open file           Template that is loaded ~
+---------           -----------------------
+foo.vim             template.vim
+plugin/foo.vim      plugin/template.vim
+Foo.java            template.java
+FooTest.java        templateTest.java
+foo.rb              template.rb
+foo_spec.rb         template_spec.rb
+foo.txt             (None)
+doc/foo.txt         doc/template.txt
+
+------------------------------------------------------------------------------
+COMMAND EXECUTION				*template-command-execution*
+
+template.vim doesn't have a feature that substitute the strings.  Instead,
+arbitrary commands can be executed.  You can execute commands in two way.
+
+1. Using the Event
+When a template is loaded, the |User| event occurs(|template-events|).
+You can use this way for common processing of all templates.
+
+Example:
+Defines replacing keywords: >
+	autocmd User plugin-template-loaded call s:template_keywords()
+	function! s:template_keywords()
+	  %s/<+FILE NAME+>/\=expand('%:t')/g
+	  %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
+	  " And more...
+	endfunction
+
+Evaluate by vim and expand the inside of <%= %>: >
+	autocmd User plugin-template-loaded
+	\ silent %s/<%=\(.\{-}\)%>/\=eval(submatch(1))/ge
+<	Expand the date it is written in the following template. >
+	<%= strftime('%Y-%m-%d') %>
+<
+Move the cursor to <+CURSOR+>:  >
+	autocmd User plugin-template-loaded
+	\    if search('<+CURSOR+>')
+	\  |   execute 'normal! "_da>'
+	\  | endif
+<
+Filtered by an external command: >
+	autocmd User plugin-template-loaded silent! :%!erb
+	autocmd User plugin-template-loaded silent! :%!php
+<
+Of course, you may call any functions.
+
+2. Write to the template file
+You can write the Vim commands in the head of template file.  The commands
+must start with a colon. These commands are executed on load.  These commands
+are deleted before the the commands are executed.
+If |:finish| command appears, it not execute since the line.  You can use this
+to include a colon in template.
+
+Example:
+It is possible to apply only to the template file by writing the example of
+the event in the template file. >
+	:if search('<+CURSOR+>')
+	:  normal! "_da>
+	:endif
+	#!include <stdio.h>
+	
+	int main(int argc, char** argv){
+		<+CURSOR+>
+	}
+
+Another example (plugin/template.vim): >
+	:% s/PLUGIN/\=expand('%:t:r')/ge
+	if exists('g:loaded_PLUGIN')
+	  finish
+	endif
+	let g:loaded_PLUGIN = 1
+
+
+==============================================================================
+INTERFACE					*template-interface*
+
+------------------------------------------------------------------------------
+COMMANDS					*template-commands*
+
+:TemplateLoad[!] {pattern}			*:TemplateLoad*
+			Load the template to match the pattern specified.  If
+			the buffer is not empty, do nothing.  When [!] is
+			specified, it reads compulsorily.
+
+Example: Open the template associated with FileType >
+	autocmd FileType * execute 'TemplateLoad /filetype/' . &l:filetype
+And, the template files are put as follows: >
+	~/.vim/template/filetype/perl
+	~/.vim/template/filetype/html
+			:
+
+------------------------------------------------------------------------------
+EVENTS						*template-events*
+
+User plugin-template-preexec		*User:plugin-template-preexec*
+	Events that occur before the command is executed in the template file.
+	If there is no command in the template file does not occur.
+
+User plugin-template-loaded		*User:plugin-template-loaded*
+	This event occurs after you load the template file.
+
+------------------------------------------------------------------------------
+OPTIONS						*template-options*
+
+g:template_basedir				*g:template_basedir*
+	This is a comma separated list of directories that is base of the
+	template files.  This value is passed to the first argument of
+	|globpath()|.
+	Default: >
+	&runtimepath
+
+g:template_files				*g:template_files*
+	Specifies the pattern of the template file.  This value is passed to
+	the second argument of |globpath()|.
+	Default: >
+	'template/**'
+
+g:template_free_pattern				*g:template_free_pattern*
+	The part treated as a wild-card of file names of the template file is
+	specified by the regular expression.
+	Default: >
+	'template'
+
+
+==============================================================================
+CHANGELOG					*template-changelog*
+
+x.x.x	xxxx-xx-xx
+	- Changed the way to run the commands in the template.
+	- Improved ways to save a register.
+	- Changed the default value of |g:template_files|.
+	- Added a few examples to help.
+	- Added a English help.
+
+0.1.0	2009-04-24
+	- Initial version.
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
