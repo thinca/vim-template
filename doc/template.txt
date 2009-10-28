@@ -1,6 +1,6 @@
 *template.txt*	Simple and flexible template engine.
 
-Version: 0.1.0
+Version: 0.2.0
 Author : thinca <thinca+vim@gmail.com>
 License: Creative Commons Attribution 2.1 Japan License
          <http://creativecommons.org/licenses/by/2.1/jp/deed.en>
@@ -207,7 +207,7 @@ g:template_free_pattern				*g:template_free_pattern*
 ==============================================================================
 CHANGELOG					*template-changelog*
 
-x.x.x	xxxx-xx-xx
+0.2.0	2009-10-28
 	- Changed the way to run the commands in the template.
 	- Improved ways to save a register.
 	- Changed the default value of |g:template_files|.

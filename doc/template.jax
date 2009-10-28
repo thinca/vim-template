@@ -1,6 +1,6 @@
 *template.txt*	シンプルで柔軟なテンプレートエンジン。
 
-Version: 0.1.0
+Version: 0.2.0
 Author : thinca <thinca+vim@gmail.com>
 License: クリエイティブ・コモンズの表示 2.1 日本ライセンス
          <http://creativecommons.org/licenses/by/2.1/jp/>
@@ -201,7 +201,7 @@ g:template_free_pattern				*g:template_free_pattern*
 ==============================================================================
 更新履歴					*template-changelog*
 
-x.x.x	xxxx-xx-xx
+0.2.0	2009-10-28
 	- テンプレート内のコマンドの実行方法を変更。
 	- レジスタの退避方法を改善。
 	- |g:template_files| のデフォルト値を変更。
