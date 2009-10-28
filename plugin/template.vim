@@ -30,13 +30,13 @@ function! s:load_template(file, force) " {{{2
 
   silent keepalt :.-1 read `=tmpl`
   if empty_buffer
-    $ delete _
+    silent $ delete _
     1
   endif
 
   if getline('.') =~ '^:'
     let [save_reg, save_reg_type] = [getreg('"'), getregtype('"')]
-    .;/^[^:]\|^$\|^:\s*fini\%[sh]\>/-1 delete "
+    silent .;/^[^:]\|^$\|^:\s*fini\%[sh]\>/-1 delete "
     if getline('.') =~# ':\s*fini\%[sh]\>'
       delete _
     endif
