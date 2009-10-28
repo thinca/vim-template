@@ -127,8 +127,6 @@ template.vim には、特定の文字列を置換するような機能はあり�
 ます。
 |:finish| を使うとそれ以降は実行されません。 : 自体をテンプレートに含めたい場
 合はこれを利用してください。
-NOTE: コマンドの実行中、 @" レジスタにはコマンド自体が格納されています。コマン
-ド終了時に元の値に復元されるので、この値は変更できません。
 
 例:
 イベントの例をテンプレートファイルに書くことで、そのテンプレートファイルのみに
@@ -173,8 +171,6 @@ NOTE: コマンドの実行中、 @" レジスタにはコマンド自体が格�
 
 User plugin-template-preexec		*User:plugin-template-preexec*
 	テンプレートファイル内のコマンドが実行される前に発生するイベントです。
-	この時、無名レジスタ |quote_quote| (@") には実行されるコマンドが格納さ
-	れています。これを上書きすることで変更が可能です。
 	テンプレートファイル内にコマンドがない場合は発生しません。
 
 User plugin-template-loaded		*User:plugin-template-loaded*
@@ -206,6 +202,7 @@ g:template_free_pattern				*g:template_free_pattern*
 更新履歴					*template-changelog*
 
 x.x.x	xxxx-xx-xx
+	- テンプレート内のコマンドの実行方法を変更。
 	- レジスタの退避方法を改善。
 	- |g:template_files| のデフォルト値を変更。
 	- ヘルプにいくつか例を追加。

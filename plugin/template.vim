@@ -40,10 +40,24 @@ function! s:load_template(file, force) " {{{2
     if getline('.') =~# ':\s*fini\%[sh]\>'
       delete _
     endif
-    silent doautocmd User plugin-template-preexec
-    " NOTE: :execute do not work when included comments.
-    silent :@"
+
+    let code = @"
     call setreg('"', save_reg, save_reg_type)
+
+    let temp = tmpl . '.vim'
+    if glob(temp) != ''
+      let temp = tempname()
+    endif
+
+    call writefile(split(code, "\n"), temp)
+    try
+      silent doautocmd User plugin-template-preexec
+      execute 'source' temp
+    catch
+      echoerr v:exception
+    finally
+      call delete(temp)
+    endtry
   endif
   silent doautocmd User plugin-template-loaded
 endfunction
