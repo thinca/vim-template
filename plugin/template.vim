@@ -23,7 +23,9 @@ function! s:load_template(file, force) " {{{2
   let tmpl = s:search_template(a:file)
   if tmpl == ''
     if &verbose && !empty(a:file)
-      echoerr 'Template file not found'
+      echohl ErrorMsg
+      echomsg 'Template file not found'
+      echohl None
     endif
     return
   endif

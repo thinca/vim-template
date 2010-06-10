@@ -207,6 +207,10 @@ g:template_free_pattern				*g:template_free_pattern*
 ==============================================================================
 CHANGELOG					*template-changelog*
 
+x.x.x	xxxx-xx-xx
+	- It was made not to become an error even when 'verbose' was one or
+	  more and the template was not found.
+
 0.2.0	2009-10-28
 	- Changed the way to run the commands in the template.
 	- Improved ways to save a register.
