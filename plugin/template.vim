@@ -53,7 +53,7 @@ function! s:load_template(file, force) " {{{2
 
     call writefile(split(code, "\n"), temp)
     try
-      silent doautocmd User plugin-template-preexec
+      doautocmd User plugin-template-preexec
       execute 'source' temp
     catch
       echoerr v:exception
@@ -61,7 +61,7 @@ function! s:load_template(file, force) " {{{2
       call delete(temp)
     endtry
   endif
-  silent doautocmd User plugin-template-loaded
+  doautocmd User plugin-template-loaded
 endfunction
 
 
@@ -154,6 +154,8 @@ command! -nargs=? -bang -bar -complete=customlist,s:TemplateLoad_complete
 augroup plugin-template
   autocmd!
   autocmd BufReadPost,BufNewFile * TemplateLoad
+  " To avoid the error message when there is no event.
+  autocmd User plugin-template-* :
 augroup END
 
 

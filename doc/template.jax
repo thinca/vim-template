@@ -204,6 +204,7 @@ g:template_free_pattern				*g:template_free_pattern*
 x.x.x	xxxx-xx-xx
 	- 'verbose' が 1 以上でテンプレートが見つからない場合でもエラーになら
 	  ないようにした。
+	- イベントを |:silent| なしで実行するように変更。
 
 0.2.0	2009-10-28
 	- テンプレート内のコマンドの実行方法を変更。
