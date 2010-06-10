@@ -24,7 +24,7 @@ function! s:load_template(file, force) " {{{2
   if tmpl == ''
     if &verbose && !empty(a:file)
       echohl ErrorMsg
-      echomsg 'Template file not found'
+      echomsg 'template: The template file is not found.'
       echohl None
     endif
     return
