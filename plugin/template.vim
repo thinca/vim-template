@@ -53,7 +53,7 @@ function! s:load_template(file, force)
     call writefile(split(code, "\n"), temp)
     try
       doautocmd <nomodeline> User plugin-template-preexec
-      execute 'source' temp
+      source `=temp`
     catch
       echoerr v:exception
     finally
