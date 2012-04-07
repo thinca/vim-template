@@ -52,7 +52,7 @@ function! s:load_template(file, force)
 
     call writefile(split(code, "\n"), temp)
     try
-      doautocmd User plugin-template-preexec
+      doautocmd <nomodeline> User plugin-template-preexec
       execute 'source' temp
     catch
       echoerr v:exception
@@ -60,7 +60,7 @@ function! s:load_template(file, force)
       call delete(temp)
     endtry
   endif
-  doautocmd User plugin-template-loaded
+  doautocmd <nomodeline> User plugin-template-loaded
 endfunction
 
 function! s:search_template(file)
