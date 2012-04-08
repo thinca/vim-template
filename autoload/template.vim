@@ -13,7 +13,7 @@ function! template#load(file, force)
   if !a:force && !empty_buffer
     return
   endif
-  let tmpl = s:search_template(a:file)
+  let tmpl = template#search(a:file)
   if tmpl == ''
     if &verbose && !empty(a:file)
       echohl ErrorMsg
@@ -57,7 +57,7 @@ function! template#load(file, force)
   doautocmd <nomodeline> User plugin-template-loaded
 endfunction
 
-function! s:search_template(file)
+function! template#search(file)
   if !exists('g:template_basedir')
     return ''
   endif
