@@ -158,14 +158,15 @@ INTERFACE					*template-interface*
 ------------------------------------------------------------------------------
 COMMANDS					*template-commands*
 
-:TemplateLoad[!] {pattern}			*:TemplateLoad*
-			Load the template to match the pattern specified.  If
-			the buffer is not empty, do nothing.  When [!] is
-			specified, it reads compulsorily.
+:TemplateLoad[!] [pattern]			*:TemplateLoad*
+			Loads a template which matches to [pattern].  If
+			[pattern] is omitted, current buffer is used.  If the
+			buffer is not empty, does nothing.  However, when [!]
+			is specified, reads compulsorily.
 
-Example: Open the template associated with FileType >
+Example: Opens a template associated with FileType >
 	autocmd FileType * execute 'TemplateLoad /filetype/' . &l:filetype
-And, the template files are put as follows: >
+And, template files are put as follows: >
 	~/.vim/template/filetype/perl
 	~/.vim/template/filetype/html
 			:
