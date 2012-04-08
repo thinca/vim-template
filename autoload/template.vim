@@ -8,14 +8,14 @@ set cpo&vim
 
 
 " Core functions. {{{1
-function! template#load(file, force)
+function! template#load(pattern, force)
   let empty_buffer = line('$') == 1 && strlen(getline(1)) == 0
   if !a:force && !empty_buffer
     return
   endif
-  let tmpl = template#search(empty(a:file) ? expand('%:p') : a:file)
+  let tmpl = template#search(empty(a:pattern) ? expand('%:p') : a:pattern)
   if tmpl == ''
-    if &verbose && !empty(a:file)
+    if &verbose && !empty(a:pattern)
       echohl ErrorMsg
       echomsg 'template: Template file was not found.'
       echohl None
@@ -57,12 +57,12 @@ function! template#load(file, force)
   doautocmd <nomodeline> User plugin-template-loaded
 endfunction
 
-function! template#search(file)
-  if !exists('g:template_basedir') || empty(a:file)
+function! template#search(pattern)
+  if !exists('g:template_basedir') || empty(a:pattern)
     return ''
   endif
   " Matching from tail.
-  let target = s:reverse(s:to_slash_path(a:file))
+  let target = s:reverse(s:to_slash_path(a:pattern))
 
   let longest = ['', 0]  " ['template file name', match length]
   for i in split(globpath(g:template_basedir, g:template_files), "\n")
