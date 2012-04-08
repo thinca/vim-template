@@ -63,7 +63,7 @@ function! template#search(file)
   endif
   " Matching from tail.
   let target = s:reverse(s:to_slash_path(empty(a:file) ?
-    \ expand('%:p') : fnamemodify(a:file, ':p')))
+    \ expand('%:p') : a:file))
 
   let longest = ['', 0]  " ['template file name', match length]
   for i in split(globpath(g:template_basedir, g:template_files), "\n")
