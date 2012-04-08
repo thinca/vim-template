@@ -25,8 +25,8 @@ delfunction s:set_default
 
 
 " Defining commands and autocmds. {{{1
-command! -nargs=? -bang -bar -complete=customlist,template#complete
-  \ TemplateLoad call template#load(<q-args>, <bang>0)
+command! -nargs=? -bang -bar -range -complete=customlist,template#complete
+  \ TemplateLoad call template#load(<q-args>, <line1>, <bang>0)
 
 
 augroup plugin-template

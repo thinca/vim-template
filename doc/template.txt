@@ -158,11 +158,11 @@ INTERFACE					*template-interface*
 ------------------------------------------------------------------------------
 COMMANDS					*template-commands*
 
-:TemplateLoad[!] [pattern]			*:TemplateLoad*
-			Loads a template which matches to [pattern].  If
-			[pattern] is omitted, current buffer is used.  If the
-			buffer is not empty, does nothing.  However, when [!]
-			is specified, reads compulsorily.
+:[line]TemplateLoad[!] [pattern]		*:TemplateLoad*
+			Loads a template which matches to [pattern] to [line].
+			If [pattern] is omitted, current buffer is used.  If
+			the buffer is not empty, does nothing.  However, when
+			[!] is specified, reads compulsorily.
 
 Example: Opens a template associated with FileType >
 	autocmd FileType * execute 'TemplateLoad /filetype/' . &l:filetype

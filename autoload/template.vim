@@ -8,7 +8,7 @@ set cpo&vim
 
 
 " Core functions. {{{1
-function! template#load(pattern, force)
+function! template#load(pattern, lnum, force)
   let empty_buffer = line('$') == 1 && strlen(getline(1)) == 0
   if !a:force && !empty_buffer
     return
@@ -23,6 +23,7 @@ function! template#load(pattern, force)
     return
   endif
 
+  call cursor(a:lnum, 1)
   silent keepalt :.-1 read `=tmpl`
   if empty_buffer
     silent $ delete _
