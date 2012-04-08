@@ -13,7 +13,7 @@ function! template#load(file, force)
   if !a:force && !empty_buffer
     return
   endif
-  let tmpl = template#search(a:file)
+  let tmpl = template#search(empty(a:file) ? expand('%:p') : a:file)
   if tmpl == ''
     if &verbose && !empty(a:file)
       echohl ErrorMsg
@@ -58,12 +58,11 @@ function! template#load(file, force)
 endfunction
 
 function! template#search(file)
-  if !exists('g:template_basedir')
+  if !exists('g:template_basedir') || empty(a:file)
     return ''
   endif
   " Matching from tail.
-  let target = s:reverse(s:to_slash_path(empty(a:file) ?
-    \ expand('%:p') : a:file))
+  let target = s:reverse(s:to_slash_path(a:file))
 
   let longest = ['', 0]  " ['template file name', match length]
   for i in split(globpath(g:template_basedir, g:template_files), "\n")
