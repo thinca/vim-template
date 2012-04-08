@@ -9,7 +9,7 @@ set cpo&vim
 
 " Core functions. {{{1
 function! template#load(file, force)
-  let empty_buffer = line('$') == 1 && strlen(getline('1')) == 0
+  let empty_buffer = line('$') == 1 && strlen(getline(1)) == 0
   if !a:force && !empty_buffer
     return
   endif
