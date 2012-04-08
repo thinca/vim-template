@@ -17,7 +17,7 @@ function! template#load(file, force)
   if tmpl == ''
     if &verbose && !empty(a:file)
       echohl ErrorMsg
-      echomsg 'template: The template file is not found.'
+      echomsg 'template: Template file was not found.'
       echohl None
     endif
     return
@@ -65,7 +65,7 @@ function! template#search(file)
   let target = s:reverse(s:to_slash_path(empty(a:file) ?
     \ expand('%:p') : fnamemodify(a:file, ':p')))
 
-  let longest = ['', 0] " ['template file name', match length]
+  let longest = ['', 0]  " ['template file name', match length]
   for i in split(globpath(g:template_basedir, g:template_files), "\n")
     let i = s:to_slash_path(i)
     if isdirectory(i) || i !~ g:template_free_pattern
