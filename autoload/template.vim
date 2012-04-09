@@ -12,7 +12,7 @@ function! template#load(pattern, ...)
   let empty_buffer = line('$') == 1 && strlen(getline(1)) == 0
   let lnum = get(a:000, 0, 0)
   let force = get(a:000, 1, 0)
-  if !a:force && !empty_buffer
+  if !force && !empty_buffer
     return
   endif
   let tmpl = template#search(empty(a:pattern) ? expand('%:p') : a:pattern)
