@@ -9,16 +9,17 @@ set cpo&vim
 let s:nomodeline = 703 < v:version || (v:version == 703 && has('patch438'))
 
 " Core functions. {{{1
-function! template#load(pattern, ...)
+function! template#load(...)
   let empty_buffer = line('$') == 1 && strlen(getline(1)) == 0
-  let lnum = get(a:000, 0, 0)
-  let force = get(a:000, 1, 0)
+  let pattern = get(a:000, 0, 0)
+  let lnum = get(a:000, 1, 0)
+  let force = get(a:000, 2, 0)
   if !force && !empty_buffer
     return
   endif
-  let tmpl = template#search(empty(a:pattern) ? expand('%:p') : a:pattern)
+  let tmpl = template#search(empty(pattern) ? expand('%:p') : pattern)
   if tmpl == ''
-    if &verbose && !empty(a:pattern)
+    if &verbose && !empty(pattern)
       echohl ErrorMsg
       echomsg 'template: Template file was not found.'
       echohl None
