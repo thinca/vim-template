@@ -1,5 +1,5 @@
 " Simple and flexible template engine.
-" Version: 0.2.1
+" Version: 0.3.0
 " Author : thinca <thinca+vim@gmail.com>
 " License: zlib License
 

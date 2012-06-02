@@ -1,6 +1,6 @@
 *template.txt*	Simple and flexible template engine.
 
-Version: 0.2.1
+Version: 0.3.0
 Author : thinca <thinca+vim@gmail.com>
 License: zlib License
 
@@ -229,6 +229,14 @@ g:template_free_pattern				*g:template_free_pattern*
 
 ==============================================================================
 CHANGELOG					*template-changelog*
+
+0.3.0	2012-06-02
+	- autoloadize.
+	  - Added |template#load()|.
+	  - Added |template#search()|.
+	  - Added |template#loading()|.
+	- Added [line] support to |:Templateload|.
+	- Use |<nomodeline>| if possible.
 
 0.2.1	2010-06-10
 	- It was made not to become an error even when 'verbose' was one or

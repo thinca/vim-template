@@ -1,6 +1,6 @@
 *template.txt*	シンプルで柔軟なテンプレートエンジン。
 
-Version: 0.2.1
+Version: 0.3.0
 Author : thinca <thinca+vim@gmail.com>
 License: zlib License
 
@@ -224,6 +224,14 @@ g:template_free_pattern				*g:template_free_pattern*
 
 ==============================================================================
 更新履歴					*template-changelog*
+
+0.3.0	2012-06-02
+	- autoload化。
+	  - |template#load()| を追加。
+	  - |template#search()| を追加。
+	  - |template#loading()| を追加。
+	- |:Templateload| で [line] が使えるようにした。
+	- 可能なら |<nomodeline>| を使うようにした。
 
 0.2.1	2010-06-10
 	- 'verbose' が 1 以上でテンプレートが見つからない場合でもエラーになら
