@@ -185,6 +185,11 @@ template#search({pattern})			*template#search()*
 	{pattern} からテンプレートファイルを検索します。最初に見付かったファイ
 	ルを返します。見付からなかった場合は空文字列を返します。
 
+template#loading()				*template#loading()*
+	ロード中のテンプレートファイルの名前を返します。これは
+	|User:plugin-template-preexec| と |User:plugin-template-loaded| の中で
+	使えます。
+
 ------------------------------------------------------------------------------
 イベント					*template-events*
 

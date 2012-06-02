@@ -190,6 +190,10 @@ template#search({pattern})			*template#search()*
 	Searchs a template file from {pattern}.  Returns the first matched
 	file. Otherwise returns an empty string.
 
+template#loading()				*template#loading()*
+	Returns the name of template file being loaded.  This can be used in
+	|User:plugin-template-preexec| and |User:plugin-template-loaded|.
+
 ------------------------------------------------------------------------------
 EVENTS						*template-events*
 

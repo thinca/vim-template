@@ -7,6 +7,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:nomodeline = 703 < v:version || (v:version == 703 && has('patch438'))
+let s:loading_template = ''
 
 " Core functions. {{{1
 function! template#load(...)
@@ -33,6 +34,9 @@ function! template#load(...)
     silent $ delete _
     1
   endif
+
+  let loading_pre = s:loading_template
+  let s:loading_template = tmpl
 
   if getline('.') =~ '^:'
     let [save_reg, save_reg_type] = [getreg('"'), getregtype('"')]
@@ -68,6 +72,8 @@ function! template#load(...)
   else
     doautocmd User plugin-template-loaded
   endif
+
+  let s:loading_template = loading_pre
 endfunction
 
 function! template#search(pattern)
@@ -99,6 +105,10 @@ function! template#search(pattern)
     endif
   endfor
   return longest[0]
+endfunction
+
+function! template#loading()
+  return s:loading_template
 endfunction
 
 
