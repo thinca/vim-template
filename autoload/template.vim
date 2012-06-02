@@ -6,6 +6,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
+let s:nomodeline = 703 < v:version || (v:version == 703 && has('patch438'))
 
 " Core functions. {{{1
 function! template#load(pattern, ...)
@@ -49,7 +50,11 @@ function! template#load(pattern, ...)
 
     call writefile(split(code, "\n"), temp)
     try
-      doautocmd <nomodeline> User plugin-template-preexec
+      if s:nomodeline
+        doautocmd <nomodeline> User plugin-template-preexec
+      else
+        doautocmd User plugin-template-preexec
+      endif
       source `=temp`
     catch
       echoerr v:exception
@@ -57,7 +62,11 @@ function! template#load(pattern, ...)
       call delete(temp)
     endtry
   endif
-  doautocmd <nomodeline> User plugin-template-loaded
+  if s:nomodeline
+    doautocmd <nomodeline> User plugin-template-loaded
+  else
+    doautocmd User plugin-template-loaded
+  endif
 endfunction
 
 function! template#search(pattern)
