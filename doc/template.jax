@@ -13,9 +13,11 @@ License: zlib License
   コマンド実行			  |template-command-execution|
 インターフェース		|template-interface|
   コマンド			  |template-commands|
+  関数				  |template-functions|
   イベント			  |template-events|
   オプション			  |template-options|
 更新履歴			|template-changelog|
+
 
 
 ==============================================================================
@@ -171,6 +173,17 @@ template.vim には、特定の文字列を置換するような機能はあり�
 	~/.vim/template/filetype/perl
 	~/.vim/template/filetype/html
 			:
+
+------------------------------------------------------------------------------
+関数						*template-functions*
+
+						*template#load()*
+template#load([{pattern} [, {line} [, {force}]]])
+	|:Templateload| の関数版です。
+
+template#search({pattern})			*template#search()*
+	{pattern} からテンプレートファイルを検索します。最初に見付かったファイ
+	ルを返します。見付からなかった場合は空文字列を返します。
 
 ------------------------------------------------------------------------------
 イベント					*template-events*

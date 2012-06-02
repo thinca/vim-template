@@ -13,9 +13,11 @@ USAGE				|template-usage|
   COMMAND EXECUTION		  |template-command-execution|
 INTERFACE			|template-interface|
   COMMANDS			  |template-commands|
+  FUNCTIONS			  |template-functions|
   EVENTS			  |template-events|
   OPTIONS			  |template-options|
 CHANGELOG			|template-changelog|
+
 
 
 ==============================================================================
@@ -176,6 +178,17 @@ And, template files are put as follows: >
 	~/.vim/template/filetype/perl
 	~/.vim/template/filetype/html
 			:
+
+------------------------------------------------------------------------------
+FUNCTIONS					*template-functions*
+
+						*template#load()*
+template#load([{pattern} [, {line} [, {force}]]])
+	A function version of |:Templateload|.
+
+template#search({pattern})			*template#search()*
+	Searchs a template file from {pattern}.  Returns the first matched
+	file. Otherwise returns an empty string.
 
 ------------------------------------------------------------------------------
 EVENTS						*template-events*
