@@ -25,6 +25,13 @@ INTRODUCTION					*template-introduction*
 edit of the file is newly started.  Template file is selected to match the
 file name to open. Also, you can run any command after the open.
 
+Requirements:
+- Vim 7.3 or later
+
+Latest version:
+https://github.com/thinca/vim-template
+
+
 
 ==============================================================================
 USAGE						*template-usage*

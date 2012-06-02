@@ -26,6 +26,13 @@ License: zlib License
 み込むこともできます。開くファイル名に合わせてテンプレートファイルが選択される
 他、開いた後に任意のコマンドを実行できます。
 
+Requirements:
+- Vim 7.3 or later
+
+Latest version:
+https://github.com/thinca/vim-template
+
+
 
 ==============================================================================
 使い方						*template-usage*
