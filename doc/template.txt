@@ -23,8 +23,8 @@ CHANGELOG			|template-changelog|
 ==============================================================================
 INTRODUCTION					*template-introduction*
 
-*template* is a Vim plugin to read the template file automatically when the
-edit of the file is newly started.  Template file is selected to match the
+*template.vim* is a Vim plugin to read the template file automatically when
+the edit of the file is newly started.  Template file is selected to match the
 file name to open. Also, you can run any command after the open.
 
 Requirements:
