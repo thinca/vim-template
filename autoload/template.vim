@@ -11,6 +11,10 @@ let s:loading_template = ''
 
 " Core functions. {{{1
 function! template#load(...)
+  if !&modifiable
+    return
+  endif
+
   let empty_buffer = line('$') == 1 && strlen(getline(1)) == 0
   let pattern = get(a:000, 0, 0)
   let lnum = get(a:000, 1, 0)
