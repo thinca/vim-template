@@ -99,9 +99,9 @@ function! template#search(pattern)
     " TODO: cache?
     let l = map(split(i, g:template_free_pattern),
       \ 's:reverse(escape(v:val, "\\"))')
-    let [head, rest] = matchlist(l[0], '\v(.{-})(/.*)')[1:2]
+    let [head, rest] = matchlist(l[0], '\C\v(.{-})(/.*)')[1:2]
     let l[0] = head . '\%[' . substitute(rest, '[][]', '[\0]', 'g') . ']'
-    let matched = matchlist(target, '^\V' . join(reverse(l), '\(\.\{-}\)'))
+    let matched = matchlist(target, '\C^\V' . join(reverse(l), '\(\.\{-}\)'))
     let len = len(matched) ?
       \ strlen(matched[0]) - strlen(join(matched[1:], '')) : 0
     if longest[1] < len
@@ -132,8 +132,8 @@ endfunction
 
 " Complete function for :TemplateLoad
 function! template#complete(lead, cmd, pos)
-  let lead = escape(matchstr(a:cmd, 'T\%[emplateLoad]!\?\s\+\zs.*$'), '\')
-  let pat = '[/\\][^/\\]*' . g:template_free_pattern
+  let lead = escape(matchstr(a:cmd, '\CT\%[emplateLoad]!\?\s\+\zs.*$'), '\')
+  let pat = '\C[/\\][^/\\]*' . g:template_free_pattern
   let list = map(filter(split(globpath(g:template_basedir, g:template_files),
     \ "\n"), '!isdirectory(v:val)'), 'v:val[match(v:val, pat):]')
   return filter(list, 'v:val =~ "^\\V" . lead')
